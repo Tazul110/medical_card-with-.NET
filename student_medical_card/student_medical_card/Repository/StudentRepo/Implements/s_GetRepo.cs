@@ -1,4 +1,4 @@
-﻿using Azure;
+﻿
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -23,27 +23,28 @@ namespace student_medical_card.Repository.StudentRepo.Implements
         {
             using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("CrudConnection")))
             {
+                connection.Open();
+
                 var query = @"
-                    SELECT *
+                    SELECT s.s_Id, s.s_Name, s.s_Dept, s.s_Gender, s.s_Email, s.b_Date,
+                           p.p_Id, p.s_Id, p.health_condition, p.prescribeBy, p.prescribe_date_time
                     FROM Student s
                     LEFT JOIN Prescription p ON s.s_Id = p.s_Id
                     WHERE s.s_Id = @s_Id
                 ";
 
+                var studentPrescriptionDictionary = new Dictionary<string, Student_Prescription_DTO>();
+
                 var result = connection.Query<Student, Prescription, Student_Prescription_DTO>(
                     query,
                     (student, prescription) =>
                     {
-                        var studentPrescription = new Student_Prescription_DTO
+                        if (!studentPrescriptionDictionary.TryGetValue(student.s_Id, out var studentPrescription))
                         {
-                            s_Id = student.s_Id,
-                            s_Name = student.s_Name,
-                            s_Dept = student.s_Dept,
-                            s_Gender = student.s_Gender,
-                            s_Email = student.s_Email,
-                            b_Date = student.b_Date,
-                            listPrescription = new List<Prescription>()
-                        };
+                            studentPrescription = new Student_Prescription_DTO();
+                            studentPrescription.listPrescription = new List<Prescription>();
+                            studentPrescriptionDictionary.Add(student.s_Id, studentPrescription);
+                        }
 
                         if (prescription != null)
                         {
@@ -54,55 +55,10 @@ namespace student_medical_card.Repository.StudentRepo.Implements
                     },
                     new { s_Id },
                     splitOn: "p_Id"
-                );
+                ).Distinct();
 
                 return result.FirstOrDefault();
             }
-            /* Student_Prescription_DTO response = new Student_Prescription_DTO();
-             var query = @"
-                     SELECT *
-                     FROM Student s
-                     LEFT JOIN Prescription p ON s.s_Id = p.s_Id
-                     Where s.s_Id=@id
-                 ";
-             var lstAll = connection.Query<Student_Prescription_DTO, Prescription, Student_Prescription_DTO>(query, (s, p) =>
-             {
-
-                 s.listPrescription = s.listPrescription ?? new List<Prescription> { p };
-                 if (p != null)
-                     s.listPrescription.Add(p);
-                 return s;
-             },
-             new { id = id },
-             splitOn: "p_Id"
-
-
-             ).GroupBy(s => s.s_Id)
- .Select(group => group.First()).ToList();
-
-
-             foreach ( var p in lstAll)
-             {
-
-             }
-
-             return response;*/
-
-            /*
-                        if (lstTodos.Count > 0)
-                        {
-                            response.StatusCode = 200;
-                            response.StatusMessage = "Data found";
-                            response.listTodo = lstTodos;
-                        }
-                        else
-                        {
-                            response.StatusCode = 100;
-                            response.StatusMessage = "No Data found";
-                            response.listTodo = null;
-                        }*/
-
-
         }
     }
 }

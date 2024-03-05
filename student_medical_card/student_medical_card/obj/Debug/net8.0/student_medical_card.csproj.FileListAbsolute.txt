@@ -135,3 +135,4 @@ D:\student_medical_card\student_medical_card\student_medical_card\bin\Debug\net8
 D:\student_medical_card\student_medical_card\student_medical_card\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\student_medical_card\student_medical_card\student_medical_card\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\student_medical_card\student_medical_card\student_medical_card\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\student_medical_card\student_medical_card\student_medical_card\obj\Debug\net8.0\student_medical_card.sourcelink.json

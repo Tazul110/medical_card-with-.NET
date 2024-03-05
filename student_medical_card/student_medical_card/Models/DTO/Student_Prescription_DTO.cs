@@ -11,7 +11,6 @@
 
        public List<Prescription>? listPrescription { get; set; }
 
-
-
+       
     }
 }

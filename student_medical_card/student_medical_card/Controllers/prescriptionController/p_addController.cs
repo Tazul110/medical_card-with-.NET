@@ -8,7 +8,7 @@ using student_medical_card.Service.PrescriptionRepo.interfaces;
 
 namespace student_medical_card.Controllers.prescriptionController
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class p_addController : ControllerBase
     {
@@ -24,8 +24,8 @@ namespace student_medical_card.Controllers.prescriptionController
 
           
             [HttpPost]
-            [Route("AddTodo")]
-            public p_Response AddTodo(Prescription prescription)
+            [Route("AddPrescription")]
+            public p_Response AddPrescription(Prescription prescription)
             {
                 SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("CrudConnection"));
                 p_Response response = new p_Response();

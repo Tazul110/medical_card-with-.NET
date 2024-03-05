@@ -10,7 +10,7 @@ namespace student_medical_card.Models
         public string s_Gender { get; set; }
         public string s_Email { get; set; }
         public DateTime b_Date { get; set; }
-
+        
 
     }
 }
